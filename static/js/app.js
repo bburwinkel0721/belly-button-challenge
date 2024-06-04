@@ -11,6 +11,10 @@ function buildMetadata(sample) {
     // Use d3 to select the panel with id of `#sample-metadata`
     let panel = d3.select('#sample-metadata')
 
+    // Add some color the panel
+    let panelLayout = d3.select('.card-header')
+    panelLayout.style('background-color', 'rgb(0, 120, 200)')
+
     // Use `.html("") to clear any existing metadata
     panel.html("")
 
@@ -45,10 +49,10 @@ function buildCharts(sample) {
       x: otuIds,
       y: sampleValues,
       mode: 'markers',
+      text: otuLabels,
       marker: {
         size: sampleValues,
         color: otuIds,
-        text: otuIds
       }
     }
     let bubbleData = [trace]
@@ -65,7 +69,7 @@ function buildCharts(sample) {
     Plotly.newPlot('bubble', bubbleData, layout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-    let mappedIds = otuIds.map(item => `OTU ${item}`)
+    let mappedIds = otuIds.map(item => `OTU ${item} `)
 
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
