@@ -6,8 +6,8 @@ function buildMetadata(sample) {
     const metaDataField = data.metadata
 
     // Filter the metadata for the object with the desired sample number
-    let desiredSample = metaDataField.filter(object => object == sample)
-
+    let desiredSample = metaDataField.filter(object => object.id == sample)
+    
     // Use d3 to select the panel with id of `#sample-metadata`
     let panel = d3.select('#sample-metadata')
 
@@ -16,7 +16,12 @@ function buildMetadata(sample) {
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
-
+    desiredSample.forEach(item => {
+      Object.entries(item).forEach(([key, value]) => {
+          panel.append("p")
+              .text(`${key.toUpperCase()}: ${value}`);
+      });
+    });
   });
 }
 
@@ -28,19 +33,39 @@ function buildCharts(sample) {
     const sampleFields = data.samples
 
     // Filter the samples for the object with the desired sample number
-
-
+    let desiredSample = sampleFields.filter(object => object.id == sample)
+  
     // Get the otu_ids, otu_labels, and sample_values
-
+    let otuIds = desiredSample[0]['otu_ids']
+    let otuLabels = desiredSample[0]['otu_labels']
+    let sampleValues = desiredSample[0]['sample_values']
 
     // Build a Bubble Chart
-
-
+    let trace = {
+      x: otuIds,
+      y: sampleValues,
+      mode: 'markers',
+      marker: {
+        size: sampleValues,
+        color: otuIds,
+        text: otuIds
+      }
+    }
+    let bubbleData = [trace]
+    let layout = {
+      title: 'Bacteria Cultures Per Sample',
+      xaxis: {
+        title: 'OTU ID'
+      },
+      yaxis: {
+        title: 'Number of Bacteria'
+      }
+    };
     // Render the Bubble Chart
-
+    Plotly.newPlot('bubble', bubbleData, layout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-
+    
 
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
