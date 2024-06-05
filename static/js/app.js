@@ -1,5 +1,5 @@
 // Build the metadata panel
-function buildMetadata(sample, randomColor) {
+function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
@@ -51,7 +51,11 @@ function buildCharts(sample, randomColor) {
         color: otuIds,
       }
     }
+
+    // Perpare bubble data for plotting
     let bubbleData = [trace]
+
+    // Perpare layout for plotting
     let layout = {
       title: 'Bacteria Cultures Per Sample',
       xaxis: {
@@ -61,6 +65,7 @@ function buildCharts(sample, randomColor) {
         title: 'Number of Bacteria'
       }
     };
+
     // Render the Bubble Chart
     Plotly.newPlot('bubble', bubbleData, layout);
 
@@ -79,13 +84,18 @@ function buildCharts(sample, randomColor) {
         color: randomColor
       }
     }
+    
+    // Perpare bar data for plotting
     let barData = [trace2]
+
+    // Perpare layout for plotting
     let layout2 = {
       title: 'Top 10 Bacteria Cultures Found',
       xaxis: {
         title: 'Number of Bacteria'
       }
     }
+
     // Render the Bar Chart
     Plotly.newPlot('bar', barData, layout2)
   });
@@ -121,30 +131,64 @@ function init() {
     dashboardStyling(randomColor);
 
     // Build charts and metadata panel with the first sample
-    buildMetadata(firstName, randomColor)
+    buildMetadata(firstName)
     buildCharts(firstName, randomColor)
   });
 }
 
 // Function to generate a random RGB color
 function getRandomColor() {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-  return `rgb(${r}, ${g}, ${b})`;
+  // List of approved colors for dashboard
+  const colorList = [
+    'rgb(169, 232, 128)',
+    'rgb(7, 115, 64)',
+    'rgb(152, 41, 124)',
+    'rgb(226, 212, 110)',
+    'rgb(153, 128, 218)',
+    'rgb(45, 140, 12)',
+    'rgb(215, 123, 178)',
+    'rgb(27, 191, 20)',
+    'rgb(166, 145, 244)',
+    'rgb(245, 50, 101)',
+    'rgb(199, 62, 22)',
+    'rgb(83, 169, 14)',
+    'rgb(133, 248, 21)',
+    'rgb(188, 79, 100)',
+    'rgb(193, 202, 39)',
+    'rgb(219, 238, 191)',
+    'rgb(174, 122, 130)',
+    'rgb(251, 158, 103)',
+    'rgb(88, 234, 233)',
+    'rgb(9, 102, 203)'
+  ]
+
+  // // Generates completly random colors for the dashboard
+  // const r = Math.floor(Math.random() * 256);
+  // const g = Math.floor(Math.random() * 256);
+  // const b = Math.floor(Math.random() * 256);
+  // console.log(`rgb(${r}, ${g}, ${b})`);
+  // return `rgb(${r}, ${g}, ${b})`;
+
+  // Chooses a random color from the approved list of colors
+  return colorList[Math.floor(Math.random() * 19)];
 }
 
 // Function for event listener
 function optionChanged(newSample) {
-  // Build charts and metadata panel each time a new sample is selected
+  // Generate random color for dashboard objects
   let randomColor = getRandomColor();
+
+  // Build dashboard styling for new sample
   dashboardStyling(randomColor);
-  buildMetadata(newSample, randomColor);
+
+  // Build charts and metadata panel each time a new sample is selected
+  buildMetadata(newSample);
   buildCharts(newSample, randomColor);
 }
 
 // Function to do the styling of my dashboard
 function dashboardStyling(randomColor){
+    // Styling for the top title block
     let titleBlock = d3.select('.col-md-12')
     titleBlock
       .style('background-color', randomColor)
@@ -152,27 +196,31 @@ function dashboardStyling(randomColor){
       .style("border", "1px solid black")
       .style("border-radius", "15px");
 
+    // Styling for the top ID number block
     let idPanel = d3.select('.card')
     idPanel
       .style('background-color', randomColor)
       .style("box-shadow", "10px 10px 5px grey")
       .style("border", "1px solid black")
 
+    // Styling for the demographic info header
     let panelHeader = d3.select('.card-header')
     panelHeader
       .style('background-color', randomColor)
-      .style("border-radius", "15px")
-      .style("border", "1px solid black");
+      .style("border-radius", "15px");
 
+    // Styling for the demographic info metadata block
     let metaBlock = d3.select('.card-primary')
     metaBlock
       .style("box-shadow", "10px 10px 5px grey")
       .style("border", "1px solid black")
       .style("border-radius", "15px");
     
+    // Styling for the bubble plot
     let bubbleChart = d3.select('#bubble')
     bubbleChart
       .style("position", "relative").style("top", "10px")
+      
 }
 
 // Initialize the dashboard
