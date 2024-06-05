@@ -70,7 +70,7 @@ function buildCharts(sample, randomColor) {
       },
       transition:{
         duration: 500,
-        easing:'cubic-in-out'
+        easing:'linear'
       }
     };
 
@@ -104,7 +104,7 @@ function buildCharts(sample, randomColor) {
       },
       transition:{
         duration: 500,
-        easing:'cubic-in-out'
+        easing:'linear'
       }
     }
 
@@ -173,13 +173,6 @@ function getRandomColor() {
     'rgb(88, 234, 233)',
     'rgb(9, 102, 203)'
   ]
-
-  // // Generates completly random colors for the dashboard
-  // const r = Math.floor(Math.random() * 256);
-  // const g = Math.floor(Math.random() * 256);
-  // const b = Math.floor(Math.random() * 256);
-  // console.log(`rgb(${r}, ${g}, ${b})`);
-  // return `rgb(${r}, ${g}, ${b})`;
 
   // Chooses a random color from the approved list of colors
   return colorList[Math.floor(Math.random() * 19)];
