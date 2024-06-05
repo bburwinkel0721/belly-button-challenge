@@ -1,5 +1,5 @@
 // Build the metadata panel
-function buildMetadata(sample) {
+function buildMetadata(sample, randomColor) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
@@ -10,10 +10,6 @@ function buildMetadata(sample) {
     
     // Use d3 to select the panel with id of `#sample-metadata`
     let panel = d3.select('#sample-metadata')
-
-    // Match the color of the panel to the bar
-    let panelLayout = d3.select('.card-header')
-    panelLayout.style('background-color', 'rgb(31, 119, 180)')
 
     // Use `.html("") to clear any existing metadata
     panel.html("")
@@ -30,7 +26,7 @@ function buildMetadata(sample) {
 }
 
 // function to build both charts
-function buildCharts(sample) {
+function buildCharts(sample, randomColor) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // Get the samples field
@@ -78,7 +74,10 @@ function buildCharts(sample) {
       y: mappedIds.slice(0,10).reverse(),
       type: 'bar',
       orientation: "h",
-      text: otuLabels.slice(0,10).reverse()
+      text: otuLabels.slice(0,10).reverse(),
+      marker: {
+        color: randomColor
+      }
     }
     let barData = [trace2]
     let layout2 = {
@@ -115,17 +114,65 @@ function init() {
     // Get the first sample from the list
     const firstName = namesField[0]
 
+    // Generate random color for styling
+    let randomColor = getRandomColor();
+
+    // Build styling for the dashboard
+    dashboardStyling(randomColor);
+
     // Build charts and metadata panel with the first sample
-    buildMetadata(firstName)
-    buildCharts(firstName)
+    buildMetadata(firstName, randomColor)
+    buildCharts(firstName, randomColor)
   });
+}
+
+// Function to generate a random RGB color
+function getRandomColor() {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
-  buildMetadata(newSample)
-  buildCharts(newSample)
+  let randomColor = getRandomColor();
+  dashboardStyling(randomColor);
+  buildMetadata(newSample, randomColor);
+  buildCharts(newSample, randomColor);
+}
+
+// Function to do the styling of my dashboard
+function dashboardStyling(randomColor){
+    let titleBlock = d3.select('.col-md-12')
+    titleBlock
+      .style('background-color', randomColor)
+      .style("box-shadow", "10px 10px 5px grey")
+      .style("border", "1px solid black")
+      .style("border-radius", "15px");
+
+    let idPanel = d3.select('.card')
+    idPanel
+      .style('background-color', randomColor)
+      .style("box-shadow", "10px 10px 5px grey")
+      .style("border", "1px solid black")
+
+    let panelHeader = d3.select('.card-header')
+    panelHeader
+      .style('background-color', randomColor)
+      .style("border-radius", "15px")
+      .style("border", "1px solid black");
+
+    let metaBlock = d3.select('.card-primary')
+    metaBlock
+      .style("box-shadow", "10px 10px 5px grey")
+      .style("border", "1px solid black")
+      .style("border-radius", "15px");
+    
+    let bubbleChart = d3.select('#bubble')
+    bubbleChart
+      .style("position", "relative").style("top", "10px")
 }
 
 // Initialize the dashboard
