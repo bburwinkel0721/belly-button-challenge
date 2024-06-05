@@ -19,7 +19,11 @@ function buildMetadata(sample) {
     desiredSample.forEach(item => {
       Object.entries(item).forEach(([key, value]) => {
           panel.append("p")
-              .text(`${key.toUpperCase()}: ${value}`);
+              .text(`${key.toUpperCase()}: ${value}`)
+              .style('opacity', 0)
+              .transition()
+              .duration(500)
+              .style('opacity', 1);
       });
     });
   });
@@ -63,11 +67,15 @@ function buildCharts(sample, randomColor) {
       },
       yaxis: {
         title: 'Number of Bacteria'
+      },
+      transition:{
+        duration: 500,
+        easing:'cubic-in-out'
       }
     };
 
     // Render the Bubble Chart
-    Plotly.newPlot('bubble', bubbleData, layout);
+    Plotly.react('bubble', bubbleData, layout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
     let mappedIds = otuIds.map(item => `OTU ${item} `)
@@ -84,7 +92,7 @@ function buildCharts(sample, randomColor) {
         color: randomColor
       }
     }
-    
+
     // Perpare bar data for plotting
     let barData = [trace2]
 
@@ -93,11 +101,15 @@ function buildCharts(sample, randomColor) {
       title: 'Top 10 Bacteria Cultures Found',
       xaxis: {
         title: 'Number of Bacteria'
+      },
+      transition:{
+        duration: 500,
+        easing:'cubic-in-out'
       }
     }
 
     // Render the Bar Chart
-    Plotly.newPlot('bar', barData, layout2)
+    Plotly.react('bar', barData, layout2)
   });
 }
 
@@ -190,7 +202,7 @@ function optionChanged(newSample) {
 function dashboardStyling(randomColor){
     // Styling for the top title block
     let titleBlock = d3.select('.col-md-12')
-    titleBlock
+    titleBlock.transition().duration(500)
       .style('background-color', randomColor)
       .style("box-shadow", "10px 10px 5px grey")
       .style("border", "1px solid black")
@@ -198,20 +210,20 @@ function dashboardStyling(randomColor){
 
     // Styling for the top ID number block
     let idPanel = d3.select('.card')
-    idPanel
+    idPanel.transition().duration(500)
       .style('background-color', randomColor)
       .style("box-shadow", "10px 10px 5px grey")
       .style("border", "1px solid black")
 
     // Styling for the demographic info header
     let panelHeader = d3.select('.card-header')
-    panelHeader
+    panelHeader.transition().duration(500)
       .style('background-color', randomColor)
       .style("border-radius", "15px");
 
     // Styling for the demographic info metadata block
     let metaBlock = d3.select('.card-primary')
-    metaBlock
+    metaBlock.transition().duration(500)
       .style("box-shadow", "10px 10px 5px grey")
       .style("border", "1px solid black")
       .style("border-radius", "15px");
