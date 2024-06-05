@@ -11,9 +11,9 @@ function buildMetadata(sample) {
     // Use d3 to select the panel with id of `#sample-metadata`
     let panel = d3.select('#sample-metadata')
 
-    // Add some color the panel
+    // Match the color of the panel to the bar
     let panelLayout = d3.select('.card-header')
-    panelLayout.style('background-color', 'rgb(0, 120, 200)')
+    panelLayout.style('background-color', 'rgb(31, 119, 180)')
 
     // Use `.html("") to clear any existing metadata
     panel.html("")
